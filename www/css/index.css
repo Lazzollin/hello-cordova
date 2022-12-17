@@ -1,0 +1,194 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+* {
+    -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+}
+
+body {
+    -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
+    -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
+    -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+    background-color:#E4E4E4;
+    background-image:linear-gradient(to bottom, #A7A7A7 0%, #E4E4E4 51%);
+    font-family: system-ui, -apple-system, -apple-system-font, 'Segoe UI', 'Roboto', sans-serif;
+    font-size:12px;
+    height:100vh;
+    margin:0px;
+    overflow: hidden;
+    /* Padding to avoid the "unsafe" areas behind notches in the screen */
+    padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+    width:100%;
+}
+
+/* Portrait layout (default) */
+.app {
+    background-color: #eaeaea;
+    height:100vh;
+    width:100vw;
+    text-align:center;
+    /* text-transform:uppercase; */
+    color: #222;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#tab-content {
+    flex: 1;
+    width: 100%;
+    max-height: 92vh;
+    position: absolute;
+    top: 0;
+}
+
+#tab-bar {
+    height: 8vh;
+    width: 100%;
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    justify-content: space-around;
+    background-color: #fff;
+    border-top: #dbdbdb solid 1px;
+}
+
+.tab-bar-btn {
+    background-color: unset;
+    border: unset;
+    width: 20%;
+    color: #444
+}
+
+.tab-bar-btn.active {
+    color: #153fbd
+}
+
+#camera-img {
+    object-fit: cover;
+    aspect-ratio: 1/1;
+    height: 20vh;
+    border-radius: 5px;
+}
+
+/* Landscape layout (with min-width) */
+@media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
+    .app {
+        background-position:left center;
+        padding:75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = image height */
+        margin:-90px 0px 0px -198px;  /* offset vertical: half of image height */
+                                      /* offset horizontal: half of image width and text area width */
+    }
+}
+
+h1 {
+    font-size:24px;
+    font-weight:normal;
+    margin:0px;
+    overflow:visible;
+    padding:0px;
+    text-align:center;
+}
+
+.event {
+    border-radius:4px;
+    color:#FFFFFF;
+    font-size:12px;
+    margin:0px 30px;
+    padding:2px 0px;
+}
+
+.event.listening {
+    background-color:#333333;
+    display:block;
+}
+
+.event.received {
+    background-color:#4B946A;
+    display:none;
+}
+
+#deviceready.ready .event.listening { display: none; }
+#deviceready.ready .event.received { display: block; }
+
+@keyframes fade {
+    from { opacity: 1.0; }
+    50% { opacity: 0.4; }
+    to { opacity: 1.0; }
+}
+
+.blink {
+    animation:fade 3000ms infinite;
+    -webkit-animation:fade 3000ms infinite;
+}
+
+
+@media screen and (prefers-color-scheme: dark) {
+    body {
+        background-image:linear-gradient(to bottom, #585858 0%, #1B1B1B 51%);
+    }
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: 92vh;
+}
+
+.geo {
+    padding: 4px 0;
+    width: 170px;
+    background-color: #494949;
+    color: white;
+    transition: ease .5s;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.geo-enabled {
+    background-color: #4B946A;
+}
+
+.geo-disabled {
+    background-color: #751818;
+}
+
+#map {
+    height: 60vh;
+    width: 95vw;
+}
+
+#nav-btn-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#nav-btn-container>button {
+    margin: 10px 0;
+    width: 60vw;
+    height: 5vh;
+    background-color: #606060;
+    border-radius: 4px;
+    border: unset;
+}
+.hidden {
+    display: none;
+}

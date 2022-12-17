@@ -1,0 +1,1 @@
+{"plugins":["cordova-plugin-statusbar","cordova-plugin-camera","cordova-plugin-navigationbar-color","cordova-plugin-android-permissions","cordova-plugin-dialogs","cordova-plugin-device","cordova-plugin-network-information","cordova-plugin-vibration","cordova-plugin-custom"]}

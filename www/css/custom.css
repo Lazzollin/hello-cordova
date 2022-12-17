@@ -1,0 +1,13 @@
+.custom-info-span {
+    font-weight: bold;
+}
+
+#custom-input {
+    margin: 10px 0;
+}
+
+.list-item-container {
+    background-color: white;
+    border-radius: 5px;
+    margin: 6px 5%;
+}
