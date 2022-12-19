@@ -197,11 +197,40 @@ After all this, we can finally tap on the `List all sensors` button to get a lis
 
 
 ## Other tests
-<img align="right" src="https://user-images.githubusercontent.com/48962891/208433557-c42d213d-a88b-4702-8f92-35be018543cd.png" alt="drawing" width="200"/>
+<img align="left" src="https://user-images.githubusercontent.com/48962891/208433557-c42d213d-a88b-4702-8f92-35be018543cd.png" alt="drawing" width="200"/>
 
+On the right-most tab we have other cordova plugins that aren't as "heavy" as the other two, this are:
+
+&ensp;&ensp;&ensp; ❖ <a href="https://github.com/apache/cordova-plugin-device">cordova-plugin-device</a>
+
+&ensp;&ensp;&ensp; ❖ <a href="https://github.com/apache/cordova-plugin-dialogs">cordova-plugin-dialogs</a>
+
+&ensp;&ensp;&ensp; ❖ <a href="https://github.com/apache/cordova-plugin-vibration">cordova-plugin-vibration</a>
+
+&ensp;&ensp;&ensp; ❖ <a href="https://github.com/apache/cordova-plugin-network-information">cordova-plugin-network-information</a>
+
+This pages are appart from the other because of them not being as packed of stuff to do as the first two, making them a little less interesting to talk about, and less extense to explain, but also, because of space in the bottom tab bar, and me wanting to make another navigator (more on this later).
+
+First lets talk about the first one in the list, the device plugin. This plugin gives us info of the device as strings, yeah that's it.
+
+To use it we just get the property we want `device.<info>`, simple as that. The properties available are:
+```
+ device.cordova
+ device.model
+ device.platform
+ device.uuid
+ device.version
+ device.manufacturer
+ device.isVirtual
+ device.serial
+ device.sdkVersion (Android only)
+```
 
 <img align="right" src="https://user-images.githubusercontent.com/48962891/208433560-37425a38-a18f-4f8a-aece-f39c5ec38d79.png" alt="drawing" width="200"/>
+<img align="right" src="https://user-images.githubusercontent.com/48962891/208535229-a3957466-8bf0-4131-91c0-901176b0d173.jpeg" alt="drawing" width="200"/>
+<img align="right" src="https://user-images.githubusercontent.com/48962891/208535244-6651c8af-f850-4a9f-aa66-71108044bf1f.jpeg" alt="drawing" width="200"/>
+<img align="right" src="https://user-images.githubusercontent.com/48962891/208535260-f8a9d86b-f338-47a0-bc0b-b08ff73644e4.jpeg" alt="drawing" width="200"/>
 
 
-<img align="right" src="https://user-images.githubusercontent.com/48962891/208438352-dcf7f548-0487-4b18-b52b-5b0f142fbedc.gif" alt="drawing" width="200"/>
+<img align="left" src="https://user-images.githubusercontent.com/48962891/208438352-dcf7f548-0487-4b18-b52b-5b0f142fbedc.gif" alt="drawing" width="200"/>
 
