@@ -11,12 +11,18 @@ The app has a bottom tab navigator that's used to separate 4 different tests
 This test uses <a href="https://github.com/apache/cordova-plugin-camera" target="_blank">cordova-plugin-camera</a> to use the phone's camera.
  
 The `Open camera` button, calls the `camera.getPicture(successCallback, errorCallback, options)` method, which takes a CameraOptions object as parameter to determine its behavior. In this case the object's `Camera.sourceType` variable defaults to `Camera.PictureSourceType.CAMERA`, which opens the default camera app, let's you take a picture, and then returns the result with the `cameraSuccess` as a String.
-This string is passed to the given `onCameraSuccess(imgURL)` method to set the src attribute of the `img` tag at the top usign JQuery.
+This string is passed to the given `onCameraSuccess(imgURL)` method below to set the src attribute of the `img` tag at the top usign JQuery.
 
-The Open galery button,also calls the `camera.getPicture(successCallback, errorCallback, options)` method, but passes an object `{sourceType: Camera.PictureSourceType.PHOTOLIBRARY}` as parameter to override the default `Camera.sourceType` to `Camera.PictureSourceType.PHOTOLIBRARY`, so instead of the camera, it opens up the phone's galery and lets you pick a picture from it, this will end up with a similar result as the Open camera button, with this method returning a String with the `cameraSuccess` method to be passed to `onCameraSuccess(imgURL)` to show it in the `img` tag on the top.
+onCameraSuccess method:
+```
+function onCameraSuccess(imgURL) {
+    console.log('Camera success, image saved on: ' + imgURL)
 
-<br><br><br><br><br><br>
-
+    $("#camera-img").attr("src", imgURL)
+}
+```
+The Open galery button, also calls the `camera.getPicture(successCallback, errorCallback, options)` method, but passes an object `{sourceType: Camera.PictureSourceType.PHOTOLIBRARY}` as parameter to override the default `Camera.sourceType` to `Camera.PictureSourceType.PHOTOLIBRARY`, so instead of the camera, it opens up the phone's galery and lets you pick a picture from it, this will end up with a similar result as the Open camera button, with this method returning a String with the `cameraSuccess` method to be passed to `onCameraSuccess(imgURL)` to show it in the `img` tag on the top.
+<br><br><br>
 
 ## Geo location test
 
