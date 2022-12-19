@@ -17,7 +17,6 @@ onCameraSuccess method:
 ```
 function onCameraSuccess(imgURL) {
     console.log('Camera success, image saved on: ' + imgURL)
-
     $("#camera-img").attr("src", imgURL)
 }
 ```
@@ -59,20 +58,24 @@ To achieve this, we can tap the `Check geo permission` button, which will call t
 
 Usign the [cordova-plugin-android-permissions](https://github.com/NeoLSN/cordova-plugin-android-permissions) plugin, it'll check if `ACCESS_FINE_LOCATION` permission is granted, this will return its status to a callback function, with which we'll check if `status.hasPermission` equals to `true`, then using JQuery, we can add the `geo-enabled` class to the Geo permission `p` tag above the map, which will turn its background-color to green, to let us know that we're ready to go.
 
+Now on to the most important part of this test, the map, this was made dinamicaly usign leaflet.js
+
+<img align="left" src="https://user-images.githubusercontent.com/48962891/208493411-f41a53d8-16fd-4f98-a580-a6072001d5ba.png" alt="drawing" width="200"/>
+
 In the case that `status.hasPermission` equals to `false`, we'll call `permissions.requestPermission` to prompt the user with the option to give the app access to our location.
 
 ## Custom test
-<img align="right" src="https://user-images.githubusercontent.com/48962891/208433549-776ad815-f331-42b3-b7df-4c3ed58600b2.png" alt="drawing" width="250"/>
+<img align="right" src="https://user-images.githubusercontent.com/48962891/208433549-776ad815-f331-42b3-b7df-4c3ed58600b2.png" alt="drawing" width="200"/>
 
 
-<img align="right" src="https://user-images.githubusercontent.com/48962891/208433551-2f9dc707-db8e-4c59-8d3b-51ba3813d38a.png" alt="drawing" width="250"/>
+<img align="left" src="https://user-images.githubusercontent.com/48962891/208433551-2f9dc707-db8e-4c59-8d3b-51ba3813d38a.png" alt="drawing" width="200"/>
 
 ## Other tests
-<img align="right" src="https://user-images.githubusercontent.com/48962891/208433557-c42d213d-a88b-4702-8f92-35be018543cd.png" alt="drawing" width="250"/>
+<img align="right" src="https://user-images.githubusercontent.com/48962891/208433557-c42d213d-a88b-4702-8f92-35be018543cd.png" alt="drawing" width="200"/>
 
 
-<img align="right" src="https://user-images.githubusercontent.com/48962891/208433560-37425a38-a18f-4f8a-aece-f39c5ec38d79.png" alt="drawing" width="250"/>
+<img align="right" src="https://user-images.githubusercontent.com/48962891/208433560-37425a38-a18f-4f8a-aece-f39c5ec38d79.png" alt="drawing" width="200"/>
 
 
-<img align="right" src="https://user-images.githubusercontent.com/48962891/208438352-dcf7f548-0487-4b18-b52b-5b0f142fbedc.gif" alt="drawing" width="250"/>
+<img align="right" src="https://user-images.githubusercontent.com/48962891/208438352-dcf7f548-0487-4b18-b52b-5b0f142fbedc.gif" alt="drawing" width="200"/>
 
