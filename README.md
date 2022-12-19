@@ -1,6 +1,6 @@
 # Cordova test app
 
-This is an app I've made to test out cordova and some of it's available plugins, as well as making my own to list all sensors availabe in an android phone
+This is an app I've made to test out cordova and some of it's available plugins, as well as making my own to list all sensors available in an android phone
 
 The app has a bottom tab navigator that's used to separate 4 different tests
 
@@ -10,8 +10,8 @@ The app has a bottom tab navigator that's used to separate 4 different tests
 
 This test uses <a href="https://github.com/apache/cordova-plugin-camera" target="_blank">cordova-plugin-camera</a> to use the phone's camera.
  
-The `Open camera` button, calls the `camera.getPicture(successCallback, errorCallback, options)` method, which takes a CameraOptions object as parameter to determine its behavior. In this case the object's `Camera.sourceType` variable defaults to `Camera.PictureSourceType.CAMERA`, which opens the default camera app, let's you take a picture, and then returns the result with the `cameraSuccess` as a String.
-This string is passed to the given `onCameraSuccess(imgURL)` method below to set the src attribute of the `img` tag at the top usign JQuery.
+The `Open camera` button calls the `camera.getPicture(successCallback, errorCallback, options)` method, which takes a CameraOptions object as parameter to determine its behavior. In this case the object's `Camera.sourceType` variable defaults to `Camera.PictureSourceType.CAMERA`, which opens the default camera app, lets you take a picture, and then returns the result with the `cameraSuccess` as a String.
+This string is passed to the given `onCameraSuccess(imgURL)` method below to set the src attribute of the `img` tag at the top using JQuery.
 
 onCameraSuccess method:
 ```
@@ -20,7 +20,7 @@ function onCameraSuccess(imgURL) {
     $("#camera-img").attr("src", imgURL)
 }
 ```
-The Open galery button, also calls the `camera.getPicture(successCallback, errorCallback, options)` method, but passes an object `{sourceType: Camera.PictureSourceType.PHOTOLIBRARY}` as parameter to override the default `Camera.sourceType` to `Camera.PictureSourceType.PHOTOLIBRARY`, so instead of the camera, it opens up the phone's galery and lets you pick a picture from it, this will end up with a similar result as the Open camera button, with this method returning a String with the `cameraSuccess` method to be passed to `onCameraSuccess(imgURL)` to show it in the `img` tag on the top.
+The Open gallery button, also calls the `camera.getPicture(successCallback, errorCallback, options)` method, but passes an object `{sourceType: Camera.PictureSourceType.PHOTOLIBRARY}` as parameter to override the default `Camera.sourceType` to `Camera.PictureSourceType.PHOTOLIBRARY`, so instead of the camera, it opens up the phone's gallery and lets you pick a picture from it, this will end up with a similar result as the Open camera button, with this method returning a String with the `cameraSuccess` method to be passed to `onCameraSuccess(imgURL)` to show it in the `img` tag on the top.
 <br><br><br>
 
 ## Geo location test
@@ -56,13 +56,13 @@ To achieve this, we can tap the `Check geo permission` button, which will call t
       })
 ```
 
-Usign the [cordova-plugin-android-permissions](https://github.com/NeoLSN/cordova-plugin-android-permissions) plugin, it'll check if `ACCESS_FINE_LOCATION` permission is granted, this will return its status to a callback function, with which we'll check if `status.hasPermission` equals to `true`, then using JQuery, we can add the `geo-enabled` class to the Geo permission `p` tag above the map, which will turn its background-color to green, to let us know that we're ready to go.
+Using the [cordova-plugin-android-permissions](https://github.com/NeoLSN/cordova-plugin-android-permissions) plugin, it'll check if `ACCESS_FINE_LOCATION` permission is granted, this will return its status to a callback function, with which we'll check if `status.hasPermission` equals to `true`, then using JQuery, we can add the `geo-enabled` class to the Geo permission `p` tag above the map, which will turn its background-color to green, to let us know that we're ready to go.
 
 In the case that `status.hasPermission` equals to `false`, we'll call `permissions.requestPermission` to prompt the user with the option to give the app access to our location.
 
 Now on to the most important part of this test, the map and getting the phone's location.
 
-The map was made dinamicaly usign [leaflet.js](https://leafletjs.com/), in order to do this first we add to the top of the HTML the leaftet.js CDN for the scripts and css.
+The map was made dynamically using [leaflet.js](https://leafletjs.com/), in order to do this first we add to the top of the HTML the leaftet.js CDN for the scripts and css.
 
 ```
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
@@ -120,8 +120,81 @@ This, if we have the needed permissions to use the location services, will retur
 ## Custom test
 <img align="right" src="https://user-images.githubusercontent.com/48962891/208433549-776ad815-f331-42b3-b7df-4c3ed58600b2.png" alt="drawing" width="200"/>
 
+Here we can test out the custom plugin I've made. For this I used [cordova-plugman](https://github.com/apache/cordova-plugman) to generate the initial code to start building the plugin.
+
+In this base code we have an echo functionality, which from the JavaScript end, will send a string to the Android end (below the cordova WebView), and then back to JavaScript.
+
+To do this first it defines a function `coolMethod()` (cool name), which calls the exec cordova method `exec(success, error, 'PluginCustom', 'coolMethod', [arg0])`.
+exec is used to call the `execute` method of the `CordovaPlugin` class, which we'll override to add our own functionality, for this we'll create a new class `PluginCustom` that'll extend `CordovaPlugin`, and then override the `execute` method, like this:
+
+```
+public class PluginCustom extends CordovaPlugin {
+    @Override
+    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+        if (action.equals("coolMethod")) {
+            String message = args.getString(0);
+            this.coolMethod(message, callbackContext);
+            return true;
+        return false;
+    }
+```
+
+So now we can call the `coolMethod()` below from our cordova app.
+
+```
+var exec = require('cordova/exec');
+
+exports.coolMethod = function (arg0, success, error) {
+    exec(success, error, 'PluginCustom', 'coolMethod', [arg0]);
+};
+```
+
+Next, we'll add the actual custom plugin, this will call a method on the android side of things, to get a list of all the available sensors on the phone.
+
+First we'll add our JavaScript method to interact with our app.
+
+```
+exports.getSensorData = function (success, error) {
+    exec(success, error, 'PluginCustom', 'getSensorData', ['']);
+}
+```
+
+and then we add a new method to the java `PluginCustom` class.
+
+```
+private void getSensorData(CallbackContext callbackContext, Context appContext) {
+    sensorManager = (SensorManager) appContext.getSystemService(Context.SENSOR_SERVICE);
+    List<Sensor> sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL);
+}
+```
 
 <img align="left" src="https://user-images.githubusercontent.com/48962891/208433551-2f9dc707-db8e-4c59-8d3b-51ba3813d38a.png" alt="drawing" width="200"/>
+
+At last we'll transform our `List<Sensor>` to a JSONArray to return to the JavaScript end. To achieve this we could use Java libraries like [gson](https://github.com/google/gson), but instead I went with a pure Java approach, which consists of making a new JSONObject, adding the Sensor object attributes from the list, and then appending this JSONObject to a JSONArray.
+
+```
+JSONArray mJSONresult = new JSONArray();
+
+for (int i = 0; i <= sensorList.size()-1; i++) {
+    JSONObject mJSONobj = new JSONObject();
+
+    Sensor sensor = sensorList.get(i);
+
+    try {
+        mJSONobj.put("Name", sensor.getName());
+        mJSONobj.put("Type", sensor.getStringType());
+    } catch (JSONException e) {
+        callbackContext.error(e.toString());
+    }
+
+    mJSONresult.put(mJSONobj);
+}
+```
+
+Then we pass our new JSONArray to then `callbackContext.success()` method to send it to the JavaScript end.
+
+After all this, we can finally tap on the `List all sensors` button to get a list of all available sensors.
+
 
 ## Other tests
 <img align="right" src="https://user-images.githubusercontent.com/48962891/208433557-c42d213d-a88b-4702-8f92-35be018543cd.png" alt="drawing" width="200"/>
