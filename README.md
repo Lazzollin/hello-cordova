@@ -58,11 +58,64 @@ To achieve this, we can tap the `Check geo permission` button, which will call t
 
 Usign the [cordova-plugin-android-permissions](https://github.com/NeoLSN/cordova-plugin-android-permissions) plugin, it'll check if `ACCESS_FINE_LOCATION` permission is granted, this will return its status to a callback function, with which we'll check if `status.hasPermission` equals to `true`, then using JQuery, we can add the `geo-enabled` class to the Geo permission `p` tag above the map, which will turn its background-color to green, to let us know that we're ready to go.
 
-Now on to the most important part of this test, the map, this was made dinamicaly usign leaflet.js
+In the case that `status.hasPermission` equals to `false`, we'll call `permissions.requestPermission` to prompt the user with the option to give the app access to our location.
+
+Now on to the most important part of this test, the map and getting the phone's location.
+
+The map was made dinamicaly usign [leaflet.js](https://leafletjs.com/), in order to do this first we add to the top of the HTML the leaftet.js CDN for the scripts and css.
+
+```
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+    integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+    crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+    crossorigin=""></script>
+```
+
+After that we create a map instance attached to a div tag and set up the initial view
+```
+<div id="map"></div>
+```
+```
+var map = L.map('map').setView([lat, long], 13);
+```
+
+Then we'll load the tiles to show the actual map, in this case we're getting them from [OSM](https://www.openstreetmap.org/ "OpenStreetMap")
+
+```
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+```
 
 <img align="left" src="https://user-images.githubusercontent.com/48962891/208493411-f41a53d8-16fd-4f98-a580-a6072001d5ba.png" alt="drawing" width="200"/>
 
-In the case that `status.hasPermission` equals to `false`, we'll call `permissions.requestPermission` to prompt the user with the option to give the app access to our location.
+Now we're finally ready to get our location, to do this we can tap on the `Get geo position` button, this will call our `getGeo()` function, which will call `navigator.geolocation.getCurrentPosition(onGeoSuccess, onGeoError)` with the following methods:
+
+```
+function onGeoSuccess(position) {
+    alert('Latitude: '          + position.coords.latitude          + '\n' +
+          'Longitude: '         + position.coords.longitude         + '\n' +
+          'Altitude: '          + position.coords.altitude          + '\n' +
+          'Accuracy: '          + position.coords.accuracy          + '\n' +
+          'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+          'Heading: '           + position.coords.heading           + '\n' +
+          'Speed: '             + position.coords.speed             + '\n' +
+          'Timestamp: '         + position.timestamp                + '\n');
+
+    var marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
+    map.setView([position.coords.latitude, position.coords.longitude], 17);
+};
+
+function onGeoError(error) {
+    alert('code: '    + error.code    + '\n' +
+          'message: ' + error.message + '\n');
+}
+```
+
+This, if we have the needed permissions to use the location services, will return and alert with all the data provided by said service, and then it will add a marker and set the center of our map on our current location
 
 ## Custom test
 <img align="right" src="https://user-images.githubusercontent.com/48962891/208433549-776ad815-f331-42b3-b7df-4c3ed58600b2.png" alt="drawing" width="200"/>
