@@ -302,8 +302,10 @@ function stopVibration() {
 ```
 
 ### Network test
-<img align="middle" src="https://user-images.githubusercontent.com/48962891/208535244-6651c8af-f850-4a9f-aa66-71108044bf1f.jpeg" alt="drawing" width="150"/>
-<img align="middle" src="https://user-images.githubusercontent.com/48962891/208535260-f8a9d86b-f338-47a0-bc0b-b08ff73644e4.jpeg" alt="drawing" width="150"/>
+<div align="middle">
+<img src="https://user-images.githubusercontent.com/48962891/208535244-6651c8af-f850-4a9f-aa66-71108044bf1f.jpeg" alt="drawing" width="150"/>
+<img src="https://user-images.githubusercontent.com/48962891/208535260-f8a9d86b-f338-47a0-bc0b-b08ff73644e4.jpeg" alt="drawing" width="150"/>
+</div>
 
 This last test uses the network information plugin to see if the device is connected to the internet, and if it is, it will prompt the type of the connection.
 
