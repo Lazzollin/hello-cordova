@@ -191,7 +191,7 @@ for (int i = 0; i <= sensorList.size()-1; i++) {
 }
 ```
 
-Then we pass our new JSONArray to then `callbackContext.success()` method to send it to the JavaScript end.
+Then we pass our new JSONArray to the `callbackContext.success()` method to send it to the JavaScript end.
 
 After all this, we can finally tap on the `List all sensors` button to get a list of all available sensors.
 
@@ -209,9 +209,12 @@ On the right-most tab we have other cordova plugins that aren't as "heavy" as th
 
 &ensp;&ensp;&ensp; ❖ <a href="https://github.com/apache/cordova-plugin-network-information">cordova-plugin-network-information</a>
 
-This pages are appart from the other because of them not being as packed of stuff to do as the first two, making them a little less interesting to talk about, and less extense to explain, but also, because of space in the bottom tab bar, and me wanting to make another navigator (more on this later).
 
-First lets talk about the first one in the list, the device plugin. This plugin gives us info of the device as strings, yeah that's it.
+This pages are apart from the other because of them not being as packed of stuff to do as the first two, making them a little less interesting to talk about, and less extensive to explain, but also, because of space in the bottom tab bar, and me wanting to make another navigator (more on this later).
+
+### Device info test
+<img align="right" src="https://user-images.githubusercontent.com/48962891/208433560-37425a38-a18f-4f8a-aece-f39c5ec38d79.png" alt="drawing" width="150"/>
+First let's talk about the first one in the list, the device plugin. This plugin gives us info of the device as strings, yeah that's it.
 
 To use it we just get the property we want `device.<info>`, simple as that. The properties available are:
 ```
@@ -226,11 +229,154 @@ To use it we just get the property we want `device.<info>`, simple as that. The 
  device.sdkVersion (Android only)
 ```
 
-<img align="right" src="https://user-images.githubusercontent.com/48962891/208433560-37425a38-a18f-4f8a-aece-f39c5ec38d79.png" alt="drawing" width="200"/>
-<img align="right" src="https://user-images.githubusercontent.com/48962891/208535229-a3957466-8bf0-4131-91c0-901176b0d173.jpeg" alt="drawing" width="200"/>
-<img align="right" src="https://user-images.githubusercontent.com/48962891/208535244-6651c8af-f850-4a9f-aa66-71108044bf1f.jpeg" alt="drawing" width="200"/>
-<img align="right" src="https://user-images.githubusercontent.com/48962891/208535260-f8a9d86b-f338-47a0-bc0b-b08ff73644e4.jpeg" alt="drawing" width="200"/>
+### Dialogs test
+<img align="right" src="https://user-images.githubusercontent.com/48962891/208438352-dcf7f548-0487-4b18-b52b-5b0f142fbedc.gif" alt="drawing" width="200"/>
 
+The dialogs plugin lets us prompt the user with information, an option, an input field or just play a notification sound.
 
-<img align="left" src="https://user-images.githubusercontent.com/48962891/208438352-dcf7f548-0487-4b18-b52b-5b0f142fbedc.gif" alt="drawing" width="200"/>
+The code used to make the demo work goes as follows:
+```
+function testAlert() {
+    navigator.notification.alert(
+        "This is a test alert, it'll callback a method to notify you you've been notified", 
+        c => $("#alert-h2").text("You've been notified"), 
+        "Test alert", 
+        "OK"
+    );
+}
+function testConfirm() {
+    const cc = c => {
+        if (c === 1) {
+            $("#confirm-h2").html("VAMOS MESSI");
+        } else {
+            $("#confirm-h2").html("Respuesta incorrecta");
+        }
+    }
 
+    navigator.notification.confirm(
+        "vamos messi?",         // Dialog message
+        c => {cc(c)},           // Dialog callback
+        "Messi?",               // Dialog title
+        ["Messi", "NoMessi"]    // Dialog button labels
+    );
+}
+
+function testPrompt() {
+    navigator.notification.prompt(
+        "Type whatever below", 
+        c => c.buttonIndex === 1 
+            ? $("#prompt-h2").text(c.input1)
+            : $("#prompt-h2").text("No input"), 
+        "Prompt test", 
+        ["OK", "Cancel"], 
+        "Type here"
+    );
+}
+function testBeep() {
+    navigator.notification.beep(1);
+    navigator.vibrate([500, 100, 500]);
+    // Vibrate 500ms, stop 100ms, then go for 500ms more
+}
+```
+
+To test the beep even while the phone is in silence mode I've added a vibration pattern which will make the device vibrate twice apart from playing the default notification sound.
+### Vibration test
+<img align="right" src="https://user-images.githubusercontent.com/48962891/208535229-a3957466-8bf0-4131-91c0-901176b0d173.jpeg" alt="drawing" width="150"/>
+
+This simple test uses the vibration plugin to make the phone go *brrr*. For this it calls the function `startVibration()` which every second it will play a one second vibration with `navigator.vibrate(1000)`, and then to stop it we can call `stopVibration()`, there isn't much more about it, here's the code of these two methods:
+```
+var v = false
+
+function startVibration() {
+    v = true;
+
+    navigator.vibrate(1000);
+    setTimeout(() => {
+        v? startVibration(): navigator.vibrate(0);
+    }, 1000);
+}
+
+function stopVibration() {
+    v = false;
+}
+```
+
+### Network test
+<img align="middle" src="https://user-images.githubusercontent.com/48962891/208535244-6651c8af-f850-4a9f-aa66-71108044bf1f.jpeg" alt="drawing" width="150"/>
+<img align="middle" src="https://user-images.githubusercontent.com/48962891/208535260-f8a9d86b-f338-47a0-bc0b-b08ff73644e4.jpeg" alt="drawing" width="150"/>
+
+This last test uses the network information plugin to see if the device is connected to the internet, and if it is, it will prompt the type of the connection.
+
+network.js
+```
+function checkConnection() {
+    const networkState = navigator.connection.type;
+
+    const states = {};
+    states[Connection.UNKNOWN]  = 'Unknown connection';
+    states[Connection.ETHERNET] = 'Ethernet connection';
+    states[Connection.WIFI]     = 'WiFi connection';
+    states[Connection.CELL_2G]  = 'Cell 2G connection';
+    states[Connection.CELL_3G]  = 'Cell 3G connection';
+    states[Connection.CELL_4G]  = 'Cell 4G connection';
+    states[Connection.CELL]     = 'Cell generic connection';
+    states[Connection.NONE]     = 'No network connection';
+
+    navigator.notification.alert(
+        'Connection type: ' + states[networkState],
+        c => cc(states[networkState]),
+        "Connection info",
+        "Thank you, nerd"
+    );
+    
+    const cc = c => {
+        $("#con-span").text( c)
+        if (networkState === Connection.UNKNOWN ||
+            networkState === Connection.NONE) {
+                $("#con-span").removeClass('connected');
+                $("#con-span").addClass('unconnected');
+            } else {
+                $("#con-span").removeClass('unconnected');
+                $("#con-span").addClass('connected');
+            }
+    }
+}
+
+checkConnection()
+```
+
+<hr>
+
+## Navigators
+
+For this demo I've made two really simple navigators using JQuery.
+
+Both work by loading a html file using the `.html()` method and replacing the content with it like the example below.
+```
+function handleTabChange(i, tab) {
+    $("#tab-bar>button.active").removeClass("active");
+    $("#tab-content").load(tab+".html")
+    $("#tab-bar").children().eq(i).addClass("active")
+}
+```
+This function will remove the `activa` CSS class from all the buttons on the tab bar, load the content of the requested page, and then add the `active` class to the pressed button.
+
+Next on the "Other" tab, we have another navigator that's even simpler, but with the difference that it'll go back to the initial page when pressing the back button.
+
+```
+document.addEventListener("backbutton", onBackKeyDown, false);
+
+function onBackKeyDown() {
+    $("#nav-wrapper").load("other.html")
+}
+
+function handleNavigation(page) {
+    $("#nav-wrapper").load(page+".html")
+}
+```
+
+That is it for this demo, I really enjoyed playing around with Cordova and getting to understand how the plugins work and interact with the native side.
+And thank you for your time for reading this, if you actually read all that you're a legend ❤.
+
+P.D.:
+ VAMOS MESSI ⭐⭐⭐ DALE CAMPEON
