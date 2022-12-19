@@ -1,4 +1,3 @@
-
 var onGeoSuccess = function(position) {
     alert('Latitude: '          + position.coords.latitude          + '\n' +
           'Longitude: '         + position.coords.longitude         + '\n' +
@@ -9,8 +8,8 @@ var onGeoSuccess = function(position) {
           'Speed: '             + position.coords.speed             + '\n' +
           'Timestamp: '         + position.timestamp                + '\n');
 
-    var marker = L.marker([-34.9336538,-57.9631417]).addTo(map);
-    map.setView([-34.9336538,-57.9631417], 17);
+    var marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
+    map.setView([position.coords.latitude, position.coords.longitude], 17);
 };
 
 function onGeoError(error) {
@@ -46,7 +45,7 @@ function checkGeoPerm() {
                 }
             };
             permissions.requestPermission(permissions.ACCESS_FINE_LOCATION, success, error);
-        }   
+        }
       })
 }
 
