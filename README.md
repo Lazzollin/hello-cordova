@@ -19,7 +19,41 @@ The Open galery button,also calls the `camera.getPicture(successCallback, errorC
 
 
 ## Geo location test
-<img align="right" src="https://user-images.githubusercontent.com/48962891/208433542-14e23cb2-8f43-42bb-9b88-5d53f1668084.png" alt="drawing" width="250"/>
+
+<img align="right" src="https://user-images.githubusercontent.com/48962891/208433542-14e23cb2-8f43-42bb-9b88-5d53f1668084.png" alt="drawing" width="200"/>
+
+In order to get the geo position, first we have to check if we're allowed to use the device's location services.
+
+To achieve this, we can tap the `Check geo permission` button, which will call the `checkGeoPerm()` method below:
+```
+    permissions.checkPermission(permissions.ACCESS_FINE_LOCATION, status => {
+        if (status.hasPermission) {
+            $(".geo").removeClass("geo-disabled")
+            $(".geo").addClass("geo-enabled")
+        } else {
+            $(".geo").removeClass("geo-enabled")
+            $(".geo").addClass("geo-disabled")
+
+            const error = function() {
+                console.warn('Geo permission has been denied');
+            };
+      
+            const success = function(status) {
+                if(!status.hasPermission) {
+                    error();
+                } else {
+                    $(".geo").removeClass("geo-disabled")
+                    $(".geo").addClass("geo-enabled")
+                }
+            };
+            permissions.requestPermission(permissions.ACCESS_FINE_LOCATION, success, error);
+        }
+      })
+```
+
+Usign the [cordova-plugin-android-permissions](https://github.com/NeoLSN/cordova-plugin-android-permissions) plugin, it'll check if `ACCESS_FINE_LOCATION` permission is granted, this will return its status to a callback function, with which we'll check if `status.hasPermission` equals to `true`, then using JQuery, we can add the `geo-enabled` class to the Geo permission `p` tag above the map, which will turn its background-color to green, to let us know that we're ready to go.
+
+In the case that `status.hasPermission` equals to `false`, we'll call `permissions.requestPermission` to prompt the user with the option to give the app access to our location.
 
 ## Custom test
 <img align="right" src="https://user-images.githubusercontent.com/48962891/208433549-776ad815-f331-42b3-b7df-4c3ed58600b2.png" alt="drawing" width="250"/>
